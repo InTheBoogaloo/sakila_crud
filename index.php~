@@ -1,0 +1,15 @@
+<?php
+session_start();
+
+/*
+ Si ya hay sesión iniciada → staff
+ Si no → login
+*/
+
+if (isset($_SESSION["staff_id"])) {
+    header("Location: staff/index.php");
+} else {
+    header("Location: auth/login.php");
+}
+
+exit;

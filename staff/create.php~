@@ -1,0 +1,39 @@
+<?php
+require "../auth/auth.php";
+require "../config/db.php";
+
+if ($_SERVER["REQUEST_METHOD"] === "POST") {
+    $passwordHash = password_hash($_POST["password"], PASSWORD_DEFAULT);
+
+    $stmt = $conn->prepare(
+        "INSERT INTO staff
+        (first_name, last_name, address_id, email, store_id, username, password, active)
+        VALUES (?, ?, ?, ?, ?, ?, ?, 1)"
+    );
+
+    $stmt->bind_param(
+        "ssissss",
+        $_POST["first_name"],
+        $_POST["last_name"],
+        $_POST["address_id"],
+        $_POST["email"],
+        $_POST["store_id"],
+        $_POST["username"],
+        $passwordHash
+    );
+
+    $stmt->execute();
+    header("Location: index.php");
+}
+?>
+
+<form method="POST">
+    <input name="first_name" placeholder="Nombre" required>
+    <input name="last_name" placeholder="Apellido" required>
+    <input name="address_id" placeholder="Address ID" required>
+    <input name="email">
+    <input name="store_id" required>
+    <input name="username" required>
+    <input type="password" name="password" required>
+    <button>Guardar</button>
+</form>
